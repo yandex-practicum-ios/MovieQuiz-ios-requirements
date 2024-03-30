@@ -1,9 +1,30 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController {
+    
+    private let movieQuizView = MovieQuizView()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("launched")
+        
+        view = movieQuizView
+        
+        setupButton()
+    }
+    
+    private func setupButton() {
+        movieQuizView.noButton.addTarget(self, action: #selector(tapNoAction), for: .touchUpInside)
+        movieQuizView.yesButton.addTarget(self, action: #selector(tapYesAction), for: .touchUpInside)
+    }
+    
+    @objc private func tapYesAction() {
+        print("Yes clicked")
+    }
+    
+    @objc private func tapNoAction() {
+        print("No clicked")
     }
 }
 
