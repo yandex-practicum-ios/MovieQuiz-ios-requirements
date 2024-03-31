@@ -82,12 +82,10 @@ final class MovieQuizViewController: UIViewController {
     }
     
     @objc private func tapYesAction() {
-        print("Yes clicked")
         showAnswerResult(isCorrect: true)
     }
     
     @objc private func tapNoAction() {
-        print("No clicked")
         showAnswerResult(isCorrect: false)
     }
 }
@@ -109,15 +107,19 @@ extension MovieQuizViewController {
     }
     
     private func showAnswerResult(isCorrect: Bool) {
+        let isCorrectAnswer = isCorrect == questions[currentQuestionIndex].correctAnswer
+        
+        if isCorrectAnswer {
+            correctAnswers += 1
+        }
+        
         // даём разрешение на рисование рамки
         movieQuizView.previewImage.layer.masksToBounds = true
         movieQuizView.previewImage.layer.borderWidth = 8
         // делаем рамку
-        movieQuizView.previewImage.layer.borderColor =
-            isCorrect == questions[currentQuestionIndex].correctAnswer
-                ? UIColor.ypGreen.cgColor
-                : UIColor.ypRed.cgColor
-        // радиус скругления углов рамки
+        movieQuizView.previewImage.layer.borderColor = isCorrectAnswer
+            ? UIColor.ypGreen.cgColor
+            : UIColor.ypRed.cgColor
         movieQuizView.previewImage.layer.cornerRadius = 20
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
@@ -127,16 +129,43 @@ extension MovieQuizViewController {
     }
     
     private func showNextQuestionOrResults() {
-        if currentQuestionIndex == questions.count - 1 { // 1
-            // идём в состояние "Результат квиза"
-        } else { // 2
+        guard currentQuestionIndex == questions.count - 1 else {
             currentQuestionIndex += 1
             
             let nextQuestion = questions[currentQuestionIndex]
             let viewModel = convert(model: nextQuestion)
             
             show(quiz: viewModel)
+            
+            return
         }
+        
+        let viewModel = QuizResultsViewModel(
+            title: "Этот раунд окончен!",
+            text: "Ваш результат: \(correctAnswers)/\(questions.count)",
+            buttonText: "Сыграть ещё раз")
+        
+        showQuizResults(quiz: viewModel)
+    }
+    
+    private func showQuizResults(quiz result: QuizResultsViewModel) {
+        let alert = UIAlertController(
+            title: result.title,
+            message: result.text,
+            preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
+            self.correctAnswers = 0
+            self.currentQuestionIndex = 0
+            
+            let firstQuestion = self.questions[self.currentQuestionIndex]
+            let viewModel = self.convert(model: firstQuestion)
+            self.show(quiz: viewModel)
+        }
+        
+        alert.addAction(action)
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
 }
