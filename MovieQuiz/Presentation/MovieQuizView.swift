@@ -80,7 +80,7 @@ final class MovieQuizView: UIView {
     
     lazy var indexLabel: UILabel = {
         let label = UILabel()
-        label.text = "1/10"
+        label.text = "0/0"
         let customFont = UIFont(name: "YS Display", size: 20.0)
         label.font = UIFontMetrics.default.scaledFont(for: customFont!)
         label.adjustsFontForContentSizeCategory = true
@@ -93,7 +93,7 @@ final class MovieQuizView: UIView {
     
     lazy var questionLabel: UILabel = {
         let label = UILabel()
-        label.text = "Рейтинг этого фильма больше чем 6?"
+        label.text = "Рейтинг этого фильма больше чем X?"
         let customFont = UIFont(name: "YS Display", size: 23.0)
         label.font = UIFontMetrics.default.scaledFont(for: customFont!)
         label.adjustsFontForContentSizeCategory = true
@@ -107,10 +107,7 @@ final class MovieQuizView: UIView {
     }()
     
     lazy var previewImage: UIImageView = {
-//        let imageView = UIImageView()
-        let logoImage = UIImage(named: "The Godfather")
-        let imageView = UIImageView(image: logoImage!)
-        
+        let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .ypWhite
@@ -164,8 +161,7 @@ final class MovieQuizView: UIView {
             mainStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
             mainStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
             
-            // TODO: it needed?
-//            previewImage.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: 2/3),
+            previewImage.heightAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.heightAnchor, multiplier: 2.0/3.0),
             questionLabel.heightAnchor.constraint(equalToConstant: 78),
             footerStackView.heightAnchor.constraint(equalToConstant: 60),
         ])
