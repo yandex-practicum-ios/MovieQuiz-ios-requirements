@@ -12,15 +12,23 @@ final class MovieQuizView: UIView {
     lazy private var headerStackView: UIStackView = {
         $0.axis = .horizontal
         $0.distribution = .equalSpacing
+        
+        return $0
+    }(UIStackView())
+    
+    lazy private var footerStackView: UIStackView = {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
         $0.spacing = 20
         
         return $0
     }(UIStackView())
     
-    lazy private var bottomStackView: UIStackView = {
-        $0.axis = .horizontal
-        $0.distribution = .fillEqually
+    lazy private var mainStackView: UIStackView = {
+        $0.axis = .vertical
+        $0.distribution = .equalCentering
         $0.spacing = 20
+        $0.translatesAutoresizingMaskIntoConstraints = false
         
         return $0
     }(UIStackView())
@@ -37,7 +45,7 @@ final class MovieQuizView: UIView {
         button.setTitleColor(.ypBlack, for: .normal)
         button.layer.cornerRadius = 15
         button.backgroundColor = .ypWhite
-
+        
         return button
     }()
     
@@ -53,7 +61,7 @@ final class MovieQuizView: UIView {
         button.setTitleColor(.ypBlack, for: .normal)
         button.layer.cornerRadius = 15
         button.backgroundColor = .ypWhite
-
+        
         return button
     }()
     
@@ -65,6 +73,7 @@ final class MovieQuizView: UIView {
         label.adjustsFontForContentSizeCategory = true
         label.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
         label.textColor = .ypWhite
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
         return label
     }()
@@ -77,6 +86,7 @@ final class MovieQuizView: UIView {
         label.adjustsFontForContentSizeCategory = true
         label.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
         label.textColor = .ypWhite
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         
         return label
     }()
@@ -84,21 +94,26 @@ final class MovieQuizView: UIView {
     lazy var questionLabel: UILabel = {
         let label = UILabel()
         label.text = "Рейтинг этого фильма больше чем 6?"
-        let customFont = UIFont(name: "YS Display", size: 20.0)
+        let customFont = UIFont(name: "YS Display", size: 23.0)
         label.font = UIFontMetrics.default.scaledFont(for: customFont!)
         label.adjustsFontForContentSizeCategory = true
-        label.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 23.0, weight: .bold)
         label.textColor = .ypWhite
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 2
+        label.textAlignment = .center
         
         return label
     }()
     
     lazy var previewImage: UIImageView = {
+//        let imageView = UIImageView()
         let logoImage = UIImage(named: "The Godfather")
         let imageView = UIImageView(image: logoImage!)
         
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .ypWhite
         imageView.layer.cornerRadius = 20
         
         return imageView
@@ -106,7 +121,6 @@ final class MovieQuizView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         backgroundColor = .ypBlack
         
         setupLayout()
@@ -122,64 +136,38 @@ final class MovieQuizView: UIView {
             questionTitleLabel,
             indexLabel,
         ].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
             headerStackView.addArrangedSubview($0)
         }
-        // bottom
+        // footer
         [
             noButton,
             yesButton,
         ].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            bottomStackView.addArrangedSubview($0)
+            footerStackView.addArrangedSubview($0)
         }
-        //
+        // body
         [
-            // TODO: - remove this after review
-//            noButton,
-//            yesButton,
-//            questionTitleLabel,
             headerStackView,
             previewImage,
-//            questionLabel,
-            bottomStackView,
+            questionLabel,
+            footerStackView,
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
+            mainStackView.addArrangedSubview($0)
         }
         
+        addSubview(mainStackView)
+        
         NSLayoutConstraint.activate([
-//            questionTitleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
-//            questionTitleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
-            headerStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            headerStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
-            headerStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            mainStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            mainStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
+            mainStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            mainStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
             
-            previewImage.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 20),
-            previewImage.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            previewImage.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            
-            // TODO: - need to add questionLabel into stackView
-//            questionLabel.topAnchor.constraint(equalTo: previewImage.bottomAnchor, constant: 20),
-//            questionLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
-//            questionLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            
-            bottomStackView.topAnchor.constraint(equalTo: previewImage.bottomAnchor, constant: 20),
-            bottomStackView.heightAnchor.constraint(equalToConstant: 60),
-            bottomStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            bottomStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            bottomStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-            
-            // TODO: - remove this after review
-//            noButton.heightAnchor.constraint(equalToConstant: 60),
-//            noButton.widthAnchor.constraint(equalTo: yesButton.widthAnchor),
-//            noButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
-//            noButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-//            
-//            yesButton.leadingAnchor.constraint(equalTo: noButton.trailingAnchor, constant: 20),
-//            yesButton.heightAnchor.constraint(equalTo: noButton.heightAnchor),
-//            yesButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
-//            yesButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            // TODO: it needed?
+//            previewImage.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: 2/3),
+            questionLabel.heightAnchor.constraint(equalToConstant: 78),
+            footerStackView.heightAnchor.constraint(equalToConstant: 60),
         ])
     }
     
