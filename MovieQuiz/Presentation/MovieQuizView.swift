@@ -9,6 +9,7 @@ import UIKit
 
 final class MovieQuizView: UIView {
     
+    // MARK: PROPERTIES
     lazy private var headerStackView: UIStackView = {
         $0.axis = .horizontal
         $0.distribution = .equalSpacing
@@ -108,14 +109,15 @@ final class MovieQuizView: UIView {
     
     lazy var previewImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .ypWhite
+        imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 20
         
         return imageView
     }()
     
+    // MARK: INIT
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .ypBlack
@@ -127,6 +129,7 @@ final class MovieQuizView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: LAYOUT
     private func setupLayout() {
         // header
         [
