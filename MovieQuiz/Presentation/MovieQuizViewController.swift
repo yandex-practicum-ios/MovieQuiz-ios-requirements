@@ -113,6 +113,8 @@ extension MovieQuizViewController {
             correctAnswers += 1
         }
         
+        movieQuizView.yesButton.isEnabled = false
+        movieQuizView.noButton.isEnabled = false
         // даём разрешение на рисование рамки
         movieQuizView.previewImage.layer.masksToBounds = true
         movieQuizView.previewImage.layer.borderWidth = 8
@@ -125,6 +127,8 @@ extension MovieQuizViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
             movieQuizView.previewImage.layer.borderWidth = 0
             showNextQuestionOrResults()
+            movieQuizView.yesButton.isEnabled = true
+            movieQuizView.noButton.isEnabled = true
         }
     }
     
