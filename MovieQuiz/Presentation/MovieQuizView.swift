@@ -11,28 +11,31 @@ final class MovieQuizView: UIView {
     
     // MARK: PROPERTIES
     lazy private var headerStackView: UIStackView = {
-        $0.axis = .horizontal
-        $0.distribution = .equalSpacing
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .equalSpacing
         
-        return $0
-    }(UIStackView())
+        return stackView
+    }()
     
     lazy private var footerStackView: UIStackView = {
-        $0.axis = .horizontal
-        $0.distribution = .fillEqually
-        $0.spacing = 20
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 20
         
-        return $0
-    }(UIStackView())
+        return stackView
+    }()
     
     lazy private var mainStackView: UIStackView = {
-        $0.axis = .vertical
-        $0.distribution = .equalCentering
-        $0.spacing = 20
-        $0.translatesAutoresizingMaskIntoConstraints = false
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .equalCentering
+        stackView.spacing = 20
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        return $0
-    }(UIStackView())
+        return stackView
+    }()
     
     lazy var noButton: UIButton = {
         let button = UIButton()
@@ -66,7 +69,7 @@ final class MovieQuizView: UIView {
         return button
     }()
     
-    lazy var questionTitleLabel: UILabel = {
+    lazy private var questionTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Вопрос"
         let customFont = UIFont(name: "YS Display", size: 20.0)
