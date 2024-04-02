@@ -41,8 +41,7 @@ final class MovieQuizView: UIView {
         let button = UIButton()
         button.setTitle("Нет", for: .normal)
         
-        let customFont = UIFont(name: "YS Display", size: 20.0)
-        button.titleLabel?.font = UIFontMetrics.default.scaledFont(for: customFont!)
+        button.titleLabel?.font = UIFontMetrics.default.scaledFont(for: AppFontSettings.customFont!)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
         
@@ -57,8 +56,7 @@ final class MovieQuizView: UIView {
         let button = UIButton()
         button.setTitle("Да", for: .normal)
         
-        let customFont = UIFont(name: "YS Display", size: 20.0)
-        button.titleLabel?.font = UIFontMetrics.default.scaledFont(for: customFont!)
+        button.titleLabel?.font = UIFontMetrics.default.scaledFont(for: AppFontSettings.customFont!)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
         
@@ -72,8 +70,8 @@ final class MovieQuizView: UIView {
     lazy private var questionTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Вопрос"
-        let customFont = UIFont(name: "YS Display", size: 20.0)
-        label.font = UIFontMetrics.default.scaledFont(for: customFont!)
+        
+        label.font = UIFontMetrics.default.scaledFont(for: AppFontSettings.customFont!)
         label.adjustsFontForContentSizeCategory = true
         label.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
         label.textColor = .ypWhite
@@ -85,8 +83,8 @@ final class MovieQuizView: UIView {
     lazy var indexLabel: UILabel = {
         let label = UILabel()
         label.text = "0/0"
-        let customFont = UIFont(name: "YS Display", size: 20.0)
-        label.font = UIFontMetrics.default.scaledFont(for: customFont!)
+        
+        label.font = UIFontMetrics.default.scaledFont(for: AppFontSettings.customFont!)
         label.adjustsFontForContentSizeCategory = true
         label.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
         label.textColor = .ypWhite
@@ -98,8 +96,8 @@ final class MovieQuizView: UIView {
     lazy var questionLabel: UILabel = {
         let label = UILabel()
         label.text = "Рейтинг этого фильма больше чем X?"
-        let customFont = UIFont(name: "YS Display", size: 23.0)
-        label.font = UIFontMetrics.default.scaledFont(for: customFont!)
+        
+        label.font = UIFontMetrics.default.scaledFont(for: AppFontSettings.customFont!)
         label.adjustsFontForContentSizeCategory = true
         label.font = UIFont.systemFont(ofSize: 23.0, weight: .bold)
         label.textColor = .ypWhite
@@ -169,6 +167,8 @@ final class MovieQuizView: UIView {
             
             previewImage.heightAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.heightAnchor, multiplier: 2.0/3.0),
             questionLabel.heightAnchor.constraint(equalToConstant: 78),
+            questionLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 62),
+            questionLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -62),
             footerStackView.heightAnchor.constraint(equalToConstant: 60),
         ])
     }
