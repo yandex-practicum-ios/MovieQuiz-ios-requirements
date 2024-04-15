@@ -11,22 +11,20 @@ final class MovieQuizViewController: UIViewController {
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     private let questionsAmount: Int = 10
-    private var questionFactory: QuestionFactoryProtocol = QuestionFactory()
+    private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view = movieQuizView
-        
         setupButton()
         
-        guard let firstQuestion = questionFactory.requestNextQuestion() else {
-            return
-        }
-        currentQuestion = firstQuestion
-        let viewModel = convert(model: firstQuestion)
-        show(quiz: viewModel)
+        let questionFactory = QuestionFactory()
+        questionFactory.delegate = self
+        self.questionFactory = questionFactory
+        
+        questionFactory.requestNextQuestion()
     }
     
     // MARK: SETUP
@@ -42,6 +40,23 @@ final class MovieQuizViewController: UIViewController {
     
     @objc private func tapNoAction() {
         showAnswerResult(isCorrect: false)
+    }
+}
+
+// MARK: QuestionFactoryDelegate
+
+extension MovieQuizViewController: QuestionFactoryDelegate {
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else {
+            return
+        }
+        
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.show(quiz: viewModel)
+        }
     }
 }
 
@@ -96,13 +111,7 @@ extension MovieQuizViewController {
     private func showNextQuestionOrResults() {
         guard currentQuestionIndex == questionsAmount - 1 else {
             currentQuestionIndex += 1
-            
-            guard let nextQuestion = questionFactory.requestNextQuestion() else {
-                return
-            }
-            currentQuestion = nextQuestion
-            let viewModel = convert(model: nextQuestion)
-            show(quiz: viewModel)
+            questionFactory?.requestNextQuestion()
             
             return
         }
@@ -126,13 +135,7 @@ extension MovieQuizViewController {
             
             self.correctAnswers = 0
             self.currentQuestionIndex = 0
-            
-            guard let firstQuestion = questionFactory.requestNextQuestion() else {
-                return
-            }
-            currentQuestion = firstQuestion
-            let viewModel = convert(model: firstQuestion)
-            self.show(quiz: viewModel)
+            self.questionFactory?.requestNextQuestion()
         }
         
         alert.addAction(action)

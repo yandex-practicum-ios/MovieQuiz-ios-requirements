@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3C23AA042BCC243100CB9E9D /* QuestionFactoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C23AA032BCC243100CB9E9D /* QuestionFactoryProtocol.swift */; };
+		3C23AA062BCD9BE800CB9E9D /* QuestionFactoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C23AA052BCD9BE800CB9E9D /* QuestionFactoryDelegate.swift */; };
 		3C52F5772BCBCF8D007D34F1 /* QuestionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C52F5762BCBCF8D007D34F1 /* QuestionFactory.swift */; };
 		3C52F5792BCBDA11007D34F1 /* QuizQuestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C52F5782BCBDA11007D34F1 /* QuizQuestion.swift */; };
 		3C52F57D2BCC1206007D34F1 /* EdgeInsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C52F57C2BCC1206007D34F1 /* EdgeInsetLabel.swift */; };
@@ -29,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		3C23AA032BCC243100CB9E9D /* QuestionFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFactoryProtocol.swift; sourceTree = "<group>"; };
+		3C23AA052BCD9BE800CB9E9D /* QuestionFactoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFactoryDelegate.swift; sourceTree = "<group>"; };
 		3C52F5762BCBCF8D007D34F1 /* QuestionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFactory.swift; sourceTree = "<group>"; };
 		3C52F5782BCBDA11007D34F1 /* QuizQuestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizQuestion.swift; sourceTree = "<group>"; };
 		3C52F57C2BCC1206007D34F1 /* EdgeInsetLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeInsetLabel.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			children = (
 				3C52F5762BCBCF8D007D34F1 /* QuestionFactory.swift */,
 				3C23AA032BCC243100CB9E9D /* QuestionFactoryProtocol.swift */,
+				3C23AA052BCD9BE800CB9E9D /* QuestionFactoryDelegate.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C23AA062BCD9BE800CB9E9D /* QuestionFactoryDelegate.swift in Sources */,
 				3C23AA042BCC243100CB9E9D /* QuestionFactoryProtocol.swift in Sources */,
 				3CCA8AD82BB857790027D6EB /* MovieQuizView.swift in Sources */,
 				AD5EE5DE284D7887003966EF /* UIColor+Extensions.swift in Sources */,
