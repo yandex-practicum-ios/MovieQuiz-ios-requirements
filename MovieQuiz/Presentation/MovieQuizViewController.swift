@@ -13,6 +13,7 @@ final class MovieQuizViewController: UIViewController {
     private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
+    private var alertPresenter: AlertPresenterProtocol?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -23,6 +24,10 @@ final class MovieQuizViewController: UIViewController {
         let questionFactory = QuestionFactory()
         questionFactory.delegate = self
         self.questionFactory = questionFactory
+        
+        let alertPresenter = AlertPresenter()
+        alertPresenter.delegate = self
+        self.alertPresenter = alertPresenter
         
         questionFactory.requestNextQuestion()
     }
@@ -43,7 +48,7 @@ final class MovieQuizViewController: UIViewController {
     }
 }
 
-// MARK: QuestionFactoryDelegate
+// MARK: DELEGATES
 
 extension MovieQuizViewController: QuestionFactoryDelegate {
     func didReceiveNextQuestion(question: QuizQuestion?) {
@@ -59,6 +64,13 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
         }
     }
 }
+
+extension MovieQuizViewController: AlertPresenterDelegate {
+    func showAlert(with alert: UIAlertController) {
+        self.present(alert, animated: true, completion: nil)
+    }
+}
+
 
 // MARK: FUNCTIONS
 
@@ -125,22 +137,18 @@ extension MovieQuizViewController {
     }
     
     private func showQuizResults(quiz result: QuizResultsViewModel) {
-        let alert = UIAlertController(
+        let model = AlertModel(
             title: result.title,
-            message: result.text,
-            preferredStyle: .alert)
+            message: result.text, 
+            buttonText: result.buttonText) { [weak self] in
+                guard let self = self else { return }
+                
+                self.correctAnswers = 0
+                self.currentQuestionIndex = 0
+                self.questionFactory?.requestNextQuestion()
+            }
         
-        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            
-            self.correctAnswers = 0
-            self.currentQuestionIndex = 0
-            self.questionFactory?.requestNextQuestion()
-        }
-        
-        alert.addAction(action)
-        
-        self.present(alert, animated: true, completion: nil)
+        alertPresenter?.callAlert(with: model)
     }
     
 }
