@@ -14,6 +14,7 @@ final class MovieQuizViewController: UIViewController {
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     private var alertPresenter: AlertPresenterProtocol?
+    private var statisticService: StatisticService = StatisticServiceImplementation()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -64,13 +65,6 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
         }
     }
 }
-
-extension MovieQuizViewController: AlertPresenterDelegate {
-    func showAlert(with alert: UIAlertController) {
-        self.present(alert, animated: true, completion: nil)
-    }
-}
-
 
 // MARK: FUNCTIONS
 
@@ -128,9 +122,19 @@ extension MovieQuizViewController {
             return
         }
         
+        statisticService.store(correct: correctAnswers, total: questionsAmount)
+        
+        let bestGame = statisticService.bestGame
+        let message = """
+            Ваш результат: \(correctAnswers)/\(questionsAmount)
+            Количество сыгранных квизов: \(statisticService.gamesCount)
+            Рекорд \(bestGame.correct)/\(bestGame.total) \(bestGame.date.dateTimeString)
+            Срендяя точность \(String(format: "%.2f", statisticService.totalAccuracy))%
+        """
+        
         let viewModel = QuizResultsViewModel(
             title: "Этот раунд окончен!",
-            text: "Ваш результат: \(correctAnswers)/\(questionsAmount)",
+            text: message,
             buttonText: "Сыграть ещё раз")
         
         showQuizResults(quiz: viewModel)
