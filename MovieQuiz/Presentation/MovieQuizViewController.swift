@@ -33,7 +33,7 @@ final class MovieQuizViewController: UIViewController {
         questionFactory.requestNextQuestion()
     }
     
-    // MARK: SETUP
+    // MARK: - SETUP
     
     private func setupButton() {
         movieQuizView.noButton.addTarget(self, action: #selector(tapNoAction), for: .touchUpInside)
@@ -49,7 +49,7 @@ final class MovieQuizViewController: UIViewController {
     }
 }
 
-// MARK: DELEGATES
+// MARK: - DELEGATES
 
 extension MovieQuizViewController: QuestionFactoryDelegate {
     func didReceiveNextQuestion(question: QuizQuestion?) {
@@ -66,7 +66,7 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
     }
 }
 
-// MARK: FUNCTIONS
+// MARK: - FUNCTIONS
 
 extension MovieQuizViewController {
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
