@@ -16,10 +16,9 @@ final class StatisticServiceImplementation: StatisticService {
     
     var totalAccuracy: Double {
         get {
-            return userDefaults.double(forKey: Keys.total.rawValue)
-        }
-        set {
-            userDefaults.set(newValue, forKey: Keys.total.rawValue)
+            let correctAnswers = userDefaults.integer(forKey: Keys.correct.rawValue)
+            let totalAnswers = userDefaults.integer(forKey: Keys.total.rawValue)
+            return Double(correctAnswers * 100 / totalAnswers)
         }
     }
     
@@ -60,15 +59,12 @@ final class StatisticServiceImplementation: StatisticService {
             bestGame = newBestGame
         }
         
-        averageAccuracy(correct: count, total: amount)
+        var totalCorrectAnswers = userDefaults.integer(forKey: Keys.correct.rawValue)
+        totalCorrectAnswers += count
+        userDefaults.set(totalCorrectAnswers, forKey: Keys.correct.rawValue)
+        
+        var totalAnswers = userDefaults.integer(forKey: Keys.total.rawValue)
+        totalAnswers += amount
+        userDefaults.set(totalAnswers, forKey: Keys.total.rawValue)
     }
-    
-    func averageAccuracy(correct count: Int, total amount: Int) {
-        if (gamesCount == 0) {
-            totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100)
-        } else {
-            totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100) / Double(gamesCount)
-        }
-    }
-    
 }
