@@ -24,7 +24,7 @@ final class StatisticServiceImplementation: StatisticService {
     
     var gamesCount: Int {
         get {
-            return userDefaults.integer(forKey: Keys.gamesCount.rawValue)
+            userDefaults.integer(forKey: Keys.gamesCount.rawValue)
         }
         set {
             userDefaults.set(newValue, forKey: Keys.gamesCount.rawValue)
