@@ -53,9 +53,7 @@ final class MovieQuizViewController: UIViewController {
 
 extension MovieQuizViewController: QuestionFactoryDelegate {
     func didReceiveNextQuestion(question: QuizQuestion?) {
-        guard let question = question else {
-            return
-        }
+        guard let question else { return }
         
         currentQuestion = question
         let viewModel = convert(model: question)
@@ -83,9 +81,7 @@ extension MovieQuizViewController {
     }
     
     private func showAnswerResult(isCorrect: Bool) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
+        guard let currentQuestion else { return }
         
         let isCorrectAnswer = isCorrect == currentQuestion.correctAnswer
         
@@ -105,7 +101,7 @@ extension MovieQuizViewController {
         movieQuizView.previewImage.layer.cornerRadius = 20
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             
             self.movieQuizView.previewImage.layer.borderWidth = 0
             self.showNextQuestionOrResults()
@@ -145,7 +141,7 @@ extension MovieQuizViewController {
             title: result.title,
             message: result.text, 
             buttonText: result.buttonText) { [weak self] in
-                guard let self = self else { return }
+                guard let self else { return }
                 
                 self.correctAnswers = 0
                 self.currentQuestionIndex = 0
