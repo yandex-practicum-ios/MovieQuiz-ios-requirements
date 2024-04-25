@@ -94,7 +94,8 @@ final class MovieQuizView: UIView {
     }()
     
     lazy var questionLabel: UILabel = {
-        let label = UILabel()
+        let label = EdgeInsetLabel()
+        label.textInsets = UIEdgeInsets(top: 0, left: 42, bottom: 0, right: 42)
         label.text = "Рейтинг этого фильма больше чем X?"
         
         label.font = UIFontMetrics.default.scaledFont(for: AppFontSettings.customFont!)
@@ -167,8 +168,6 @@ final class MovieQuizView: UIView {
             
             previewImage.heightAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.heightAnchor, multiplier: 2.0/3.0),
             questionLabel.heightAnchor.constraint(equalToConstant: 78),
-            questionLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 62),
-            questionLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -62),
             footerStackView.heightAnchor.constraint(equalToConstant: 60),
         ])
     }
