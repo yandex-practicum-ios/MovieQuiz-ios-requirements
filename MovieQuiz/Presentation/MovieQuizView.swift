@@ -32,9 +32,14 @@ final class MovieQuizView: UIView {
         stackView.axis = .vertical
         stackView.distribution = .equalCentering
         stackView.spacing = 20
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         
         return stackView
+    }()
+    
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        
+        return activityIndicator
     }()
     
     lazy var noButton: UIButton = {
@@ -157,10 +162,19 @@ final class MovieQuizView: UIView {
             $0.translatesAutoresizingMaskIntoConstraints = false
             mainStackView.addArrangedSubview($0)
         }
-        
-        addSubview(mainStackView)
+        // main elements
+        [
+            mainStackView,
+            activityIndicator,
+        ].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            addSubview($0)
+        }
         
         NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
+            
             mainStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
             mainStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             mainStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),

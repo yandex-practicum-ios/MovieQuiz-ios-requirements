@@ -14,7 +14,9 @@ final class MovieQuizViewController: UIViewController {
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     private var alertPresenter: AlertPresenterProtocol?
-    private var statisticService: StatisticService = StatisticServiceImplementation()
+    
+    private lazy var statisticService: StatisticService = StatisticServiceImplementation()
+    private lazy var moviesLoader: MoviesLoadingProtocol = MoviesLoader()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -22,15 +24,15 @@ final class MovieQuizViewController: UIViewController {
         view = movieQuizView
         setupButton()
         
-        let questionFactory = QuestionFactory()
-        questionFactory.delegate = self
-        self.questionFactory = questionFactory
-        
         let alertPresenter = AlertPresenter()
         alertPresenter.delegate = self
         self.alertPresenter = alertPresenter
         
-        questionFactory.requestNextQuestion()
+        let questionFactory = QuestionFactory(moviesLoader: moviesLoader, delegate: self)
+        self.questionFactory = questionFactory
+        showLoadingIndicator()
+        
+        questionFactory.loadData()
     }
     
     // MARK: - SETUP
@@ -62,14 +64,52 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
             self?.show(quiz: viewModel)
         }
     }
+    
+    func didLoadDataFromServer() {
+        hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: any Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
 }
 
 // MARK: - FUNCTIONS
 
 extension MovieQuizViewController {
+    private func showLoadingIndicator() {
+        movieQuizView.activityIndicator.isHidden = false
+        movieQuizView.activityIndicator.startAnimating()
+    }
+    
+    private func hideLoadingIndicator() {
+        self.movieQuizView.activityIndicator.isHidden = true
+        self.movieQuizView.activityIndicator.stopAnimating()
+    }
+    
+    private func showNetworkError(message: String) {
+        hideLoadingIndicator()
+        
+        let model = AlertModel(
+            title: "Ошибка",
+            message: message,
+            buttonText: "Попробовать ещё раз") { [weak self] in
+                guard let self else { return }
+                
+                self.correctAnswers = 0
+                self.currentQuestionIndex = 0
+                self.questionFactory?.requestNextQuestion()
+            }
+        
+        // TODO: load data one more time?
+        
+        alertPresenter?.callAlert(with: model)
+    }
+    
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         QuizStepViewModel(
-            image: UIImage(named: model.image) ?? UIImage(),
+            image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
     }

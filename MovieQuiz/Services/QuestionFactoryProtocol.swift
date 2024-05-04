@@ -8,5 +8,6 @@
 import Foundation
 
 protocol QuestionFactoryProtocol {
+    func loadData() async
     func requestNextQuestion()
 }
