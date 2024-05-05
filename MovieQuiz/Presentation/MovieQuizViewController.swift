@@ -30,8 +30,8 @@ final class MovieQuizViewController: UIViewController {
         
         let questionFactory = QuestionFactory(moviesLoader: moviesLoader, delegate: self)
         self.questionFactory = questionFactory
-        showLoadingIndicator()
         
+        showLoadingIndicator()
         questionFactory.loadData()
     }
     
@@ -99,10 +99,12 @@ extension MovieQuizViewController {
                 
                 self.correctAnswers = 0
                 self.currentQuestionIndex = 0
-                self.questionFactory?.requestNextQuestion()
+                // load data one more time
+                self.showLoadingIndicator()
+                Task {
+                    await self.questionFactory?.loadData()
+                }
             }
-        
-        // TODO: load data one more time?
         
         alertPresenter?.callAlert(with: model)
     }

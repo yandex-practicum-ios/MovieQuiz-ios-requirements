@@ -18,8 +18,7 @@ struct MoviesLoader: MoviesLoadingProtocol {
     // MARK: - URL
     private var mostPopularMoviesUrl: URL {
         // Если мы не смогли преобразовать строку в URL, то приложение упадёт с ошибкой
-        // TODO: move to constant
-        guard let url = URL(string: "https://tv-api.com/en/API/Top250Movies/k_zcuw1ytf") else {
+        guard let url = URL(string: AppApiConstants.mostPopularMoviesUrl + AppApiConstants.apiKey) else {
             preconditionFailure("Unable to construct mostPopularMoviesUrl")
         }
         return url
@@ -44,26 +43,20 @@ struct MoviesLoader: MoviesLoadingProtocol {
     
     // MARK: - loadMovies with async/await
     func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void) async {
-        Task {
-            do {
-                let data = try await networkClient.fetchAsync(url: mostPopularMoviesUrl)
-                let mostPopularMovies = try JSONDecoder().decode(MostPopularMovies.self, from: data)
+        do {
+            let data = try await networkClient.fetchAsync(url: mostPopularMoviesUrl)
+            let mostPopularMovies = try JSONDecoder().decode(MostPopularMovies.self, from: data)
 
-                if !mostPopularMovies.errorMessage.isEmpty {
-                    print("Error in loaded data: \(mostPopularMovies.errorMessage)")
-                    handler(.failure(mostPopularMovies.errorMessage))
-                    return
-                }
-                
-                handler(.success(mostPopularMovies))
-            } catch {
-                print("Error during data loading: \(error)")
-                handler(.failure(error))
+            if !mostPopularMovies.errorMessage.isEmpty {
+                print("Error in loaded data: \(mostPopularMovies.errorMessage)")
+                handler(.failure(mostPopularMovies.errorMessage))
+                return
             }
+            
+            handler(.success(mostPopularMovies))
+        } catch {
+            print("Error during data loading: \(error)")
+            handler(.failure(error))
         }
     }
-}
-
-extension String: LocalizedError {
-    public var errorDescription: String? { return self }
 }
