@@ -38,6 +38,7 @@ final class MovieQuizView: UIView {
     
     lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.style = .large
         
         return activityIndicator
     }()
